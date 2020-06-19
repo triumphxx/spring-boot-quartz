@@ -20,11 +20,10 @@ import java.util.List;
  * @desc:应用级别数据缓存
  **/
 @Component
-public class ContextStartup implements ApplicationRunner, ServletContextAware {
+public class ContextStartup implements ApplicationRunner {
     @Autowired
     QrtzJobDetailsService qrtzJobDetailsService;
 
-    ServletContext servletContext;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -35,8 +34,4 @@ public class ContextStartup implements ApplicationRunner, ServletContextAware {
         System.out.println("查询出来的数据是"+JSONUtil.formatJsonStr(list.toString()));
     }
 
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

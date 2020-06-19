@@ -2,12 +2,12 @@ package com.triumphxx.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.triumphxx.entity.QrtzJobDetails;
-import com.triumphxx.service.QrtzJobDetailsService;
+import com.triumphxx.service.JobService;
+import com.triumphxx.util.Result;
 import org.quartz.JobKey;
-import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,17 +19,31 @@ import java.util.List;
  * @desc:测试job
  **/
 @RestController
-@RequestMapping("/job")
-public class JobController {
+public class JobController  extends BaseController{
 
     @Autowired
-    QrtzJobDetailsService qrtzJobDetailsService;
+    JobService jobService;
 
-    @Autowired
-    Scheduler scheduler;
+    @PostMapping("/job/add")
+    public Result addJob(String jobClassName,String jobGroupName,String cron){
 
-    @RequestMapping("start")
-    public void resumeJob() throws SchedulerException {
+        return Result.success();
+    }
+
+    @PostMapping("/job/delete")
+    public Result deleteJob(String jobClassName,String jobGroupName){
+
+        return Result.success();
+    }
+
+    @PostMapping("/job/update")
+    public Result updateJob(String jobClassName,String jobGroupName,String cron){
+
+        return Result.success();
+    }
+
+    @PostMapping("/job/start")
+    public void startJob(String jobClassName,String jobGroupName) throws SchedulerException {
 
         List<QrtzJobDetails> list = qrtzJobDetailsService.list(new QueryWrapper<QrtzJobDetails>()
                 .eq("SCHED_NAME", "clusteredScheduler")
@@ -37,12 +51,14 @@ public class JobController {
         scheduler.resumeJob(JobKey.jobKey(list.get(0).getJobName(), list.get(0).getJobGroup()));
     }
 
-    @RequestMapping("stop")
-    public void pauseJob() throws SchedulerException {
+    @PostMapping("job/stop")
+    public void stopJob(String jobClassName,String jobGroupName) throws SchedulerException {
 
         List<QrtzJobDetails> list = qrtzJobDetailsService.list(new QueryWrapper<QrtzJobDetails>()
                 .eq("SCHED_NAME", "clusteredScheduler")
         );
         scheduler.pauseJob(JobKey.jobKey(list.get(0).getJobName(), list.get(0).getJobGroup()));
     }
+
+
 }
