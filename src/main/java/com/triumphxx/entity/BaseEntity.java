@@ -10,28 +10,5 @@ import lombok.Data;
  **/
 @Data
 public class BaseEntity {
-    /**
-     * job名称
-     */
-    String jobName;
-    /**
-     * job分组名称
-      */
-    String  jobGroupName;
-    /**
-     * 触发器名称
-     */
-    String  triggerName;
-    /**
-     * 触发器分组名称
-     */
-    String triggerGroupName;
-    /**
-     * 需要执行的job.class
-     */
-    Class  jobClass;
-    /**
-     * cron 表达式
-     */
-    String cron;
+
 }

@@ -2,13 +2,14 @@ package com.triumphxx.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.triumphxx.entity.QrtzJobDetails;
+import com.triumphxx.entity.vo.QuartzVo;
 import com.triumphxx.service.JobService;
+import com.triumphxx.service.QrtzJobDetailsService;
 import com.triumphxx.util.Result;
-import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,46 +19,63 @@ import java.util.List;
  * @Time:14:06
  * @desc:测试job
  **/
-@RestController
-public class JobController  extends BaseController{
+@Controller
+public class JobController extends BaseController {
 
     @Autowired
     JobService jobService;
+    @Autowired
+    QrtzJobDetailsService qrtzJobDetailsService;
+
+    @RequestMapping({"", "/"})
+    public String index() {
+        return "/view/index";
+    }
+
+    @GetMapping("/query/jobs")
+    @ResponseBody
+    public Result query() {
+        List<QrtzJobDetails> list = qrtzJobDetailsService.list(new QueryWrapper<QrtzJobDetails>()
+                .eq("SCHED_NAME", "clusteredScheduler")
+        );
+        return Result.success(list);
+    }
+
 
     @PostMapping("/job/add")
-    public Result addJob(String jobClassName,String jobGroupName,String cron){
+    @ResponseBody
+    public Result addJob(@RequestBody QuartzVo quartzVo) throws Exception {
+        Result result = jobService.addJob(quartzVo.getJobClassName(), quartzVo.getJobGroupName(), quartzVo.getCron());
+        return result;
 
-        return Result.success();
     }
 
     @PostMapping("/job/delete")
-    public Result deleteJob(String jobClassName,String jobGroupName){
-
-        return Result.success();
+    @ResponseBody
+    public Result deleteJob(@RequestBody QuartzVo quartzVo) throws SchedulerException {
+        Result result = jobService.deleteJob(quartzVo.getJobClassName(), quartzVo.getJobGroupName());
+        return result;
     }
 
     @PostMapping("/job/update")
-    public Result updateJob(String jobClassName,String jobGroupName,String cron){
-
-        return Result.success();
+    @ResponseBody
+    public Result updateJob(@RequestBody QuartzVo quartzVo) throws SchedulerException {
+        Result result = jobService.updateJob(quartzVo.getJobClassName(), quartzVo.getJobGroupName(), quartzVo.getCron());
+        return result;
     }
 
     @PostMapping("/job/start")
-    public void startJob(String jobClassName,String jobGroupName) throws SchedulerException {
-
-        List<QrtzJobDetails> list = qrtzJobDetailsService.list(new QueryWrapper<QrtzJobDetails>()
-                .eq("SCHED_NAME", "clusteredScheduler")
-        );
-        scheduler.resumeJob(JobKey.jobKey(list.get(0).getJobName(), list.get(0).getJobGroup()));
+    @ResponseBody
+    public Result startJob(@RequestBody QuartzVo quartzVo) throws SchedulerException {
+        Result result = jobService.startJob(quartzVo.getJobClassName(), quartzVo.getJobGroupName());
+        return result;
     }
 
     @PostMapping("job/stop")
-    public void stopJob(String jobClassName,String jobGroupName) throws SchedulerException {
-
-        List<QrtzJobDetails> list = qrtzJobDetailsService.list(new QueryWrapper<QrtzJobDetails>()
-                .eq("SCHED_NAME", "clusteredScheduler")
-        );
-        scheduler.pauseJob(JobKey.jobKey(list.get(0).getJobName(), list.get(0).getJobGroup()));
+    @ResponseBody
+    public Result stopJob(@RequestBody QuartzVo quartzVo) throws SchedulerException {
+        Result result = jobService.stopJob(quartzVo.getJobClassName(), quartzVo.getJobGroupName());
+        return result;
     }
 
 

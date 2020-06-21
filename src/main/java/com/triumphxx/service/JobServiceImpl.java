@@ -6,6 +6,8 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * @author:triumphxx
  * @Date:2020/6/14
@@ -27,14 +29,16 @@ public class JobServiceImpl implements JobService {
      * @throws SchedulerException
      */
     public Result addJob(String jobName, String jobGroupName, String cron) throws Exception {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
         //构建job信息
         JobDetail jobDetail = JobBuilder.newJob(getClass(jobName).getClass()).withIdentity(jobName, jobGroupName).build();
         //cron表达式调度器构建
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
         //构建 Trigger
         CronTrigger cronTrigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName).withSchedule(scheduleBuilder).build();
-        scheduler.scheduleJob(jobDetail, cronTrigger);
+        Date date = scheduler.scheduleJob(jobDetail, cronTrigger);
+        if (date==null){
+            return Result.fail("添加定时任务失败");
+        }
         return Result.success();
     }
 
@@ -51,7 +55,10 @@ public class JobServiceImpl implements JobService {
         scheduler.pauseTrigger(triggerKey);
         scheduler.unscheduleJob(triggerKey);
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
-        scheduler.deleteJob(jobKey);
+        boolean deleteJob = scheduler.deleteJob(jobKey);
+        if (deleteJob){
+            return Result.fail("删除定时任务失败");
+        }
         return Result.success();
     }
 
@@ -68,7 +75,10 @@ public class JobServiceImpl implements JobService {
         CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
         //重新构建表达式trigger
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-        scheduler.rescheduleJob(triggerKey, trigger);
+        Date date = scheduler.rescheduleJob(triggerKey, trigger);
+        if (date==null){
+            return Result.fail("添加定时任务失败");
+        }
         return Result.success();
 
     }
