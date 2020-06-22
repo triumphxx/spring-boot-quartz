@@ -29,6 +29,13 @@ public class JobServiceImpl implements JobService {
      * @throws SchedulerException
      */
     public Result addJob(String jobName, String jobGroupName, String cron) throws Exception {
+        //校验cron表达式 是否符合规范
+        boolean b = CronExpression.isValidExpression(cron);
+        if (!b){
+            return Result.fail("cron表达式书写有误，请重新提交");
+        }
+        // 启动调度器
+        scheduler.start();
         //构建job信息
         JobDetail jobDetail = JobBuilder.newJob(getClass(jobName).getClass()).withIdentity(jobName, jobGroupName).build();
         //cron表达式调度器构建

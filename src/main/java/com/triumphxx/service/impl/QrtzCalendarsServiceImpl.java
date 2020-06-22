@@ -1,8 +1,7 @@
 package com.triumphxx.service.impl;
 
-import com.triumphxx.entity.QrtzCalendars;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.triumphxx.mapper.QrtzCalendarsMapper;
-import com.triumphxx.service.QrtzCalendarsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-05-28
  */
 @Service
-public class QrtzCalendarsServiceImpl extends ServiceImpl<QrtzCalendarsMapper, QrtzCalendars> implements QrtzCalendarsService {
+public class QrtzCalendarsServiceImpl extends ServiceImpl<QrtzCalendarsMapper, QrtzCalendars> implements IService<QrtzCalendars> {
 
 }

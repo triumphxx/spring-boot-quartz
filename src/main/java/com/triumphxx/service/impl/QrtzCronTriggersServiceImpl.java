@@ -1,8 +1,7 @@
 package com.triumphxx.service.impl;
 
-import com.triumphxx.entity.QrtzCronTriggers;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.triumphxx.mapper.QrtzCronTriggersMapper;
-import com.triumphxx.service.QrtzCronTriggersService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-05-28
  */
 @Service
-public class QrtzCronTriggersServiceImpl extends ServiceImpl<QrtzCronTriggersMapper, QrtzCronTriggers> implements QrtzCronTriggersService {
+public class QrtzCronTriggersServiceImpl extends ServiceImpl<QrtzCronTriggersMapper, QrtzCronTriggers> implements IService<QrtzCronTriggers> {
 
 }

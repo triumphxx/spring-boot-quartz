@@ -1,8 +1,7 @@
 package com.triumphxx.service.impl;
 
-import com.triumphxx.entity.QrtzJobStats;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.triumphxx.mapper.QrtzJobStatsMapper;
-import com.triumphxx.service.QrtzJobStatsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-05-28
  */
 @Service
-public class QrtzJobStatsServiceImpl extends ServiceImpl<QrtzJobStatsMapper, QrtzJobStats> implements QrtzJobStatsService {
+public class QrtzJobStatsServiceImpl extends ServiceImpl<QrtzJobStatsMapper, QrtzJobStats> implements IService<QrtzJobStats> {
 
 }
