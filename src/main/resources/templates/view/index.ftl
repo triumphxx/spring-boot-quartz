@@ -12,7 +12,8 @@
 <div id="app">
     <button @click="query">查询定时任务</button>
     <button @click="">添加定时任务</button>
-    <table class="table">
+    <p v-show="isShow" style="background-color: red">{{msg}}</p>
+    <table class="table" style="line-break: auto">
         <thead>
         <tr v-show="showFlag">
             <th>序号</th>
@@ -27,9 +28,10 @@
             <td>{{item.jobName}}</td>
             <td>{{item.jobGroup}}</td>
             <td @click="start(item.jobName,item.jobGroup)">启动</td>
-<#--            <td @click="stop()">暂停</td>-->
+            <td @click="stop(item.jobName,item.jobGroup)">暂停</td>
 <#--            <td @click="update()">修改</td>-->
 <#--            <td @click="delete()">删除</td>-->
+        </tr>
         </tbody>
     </table>
 
@@ -45,29 +47,45 @@
             job:{
                 jobClassName:'',
                 jobGroupName:''
-            }
+            },
+            msg:'',
+            isShow:false
         },
         methods:{
             query:function () {
                 var that = this;
                 axios.get("/query/jobs").then(function (response) {
                     that.list = response.data.data;
+                    that.isShow=false;
+                    console.log(response)
                     if (that!=null){
                         that.showFlag=true;
                     }
                 })
             },
             start:function (jobName,jobGroup) {
-                console.log(jobName+jobGroup);
                 this.job.jobClassName=jobName;
                 this.job.jobGroupName=jobGroup;
+                var that = this;
                 axios.post("/job/start",this.job).then(function (response) {
-                    console.log(response);
-                    console.log("开始启动");
+                    that.msg = response.data.msg;
+                    that.isShow=true;
+                },function (err) {
+                    that.isShow=false;
+                })
+            },
+            stop:function (jobName,jobGroup) {
+                this.job.jobClassName=jobName;
+                this.job.jobGroupName=jobGroup;
+                var that = this;
+                axios.post("/job/stop",this.job).then(function (response) {
+                    that.msg = response.data.msg;
+                    that.isShow=true;
+                },function (err) {
+                    that.isShow=false;
                 })
             }
         }
-
     });
 </script>
 </html>
