@@ -63,7 +63,7 @@ public class JobServiceImpl implements JobService {
         scheduler.unscheduleJob(triggerKey);
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         boolean deleteJob = scheduler.deleteJob(jobKey);
-        if (deleteJob){
+        if (!deleteJob){
             return Result.fail("删除定时任务失败");
         }
         return Result.success();
