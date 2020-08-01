@@ -1,6 +1,5 @@
 package com.triumphxx.job;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.triumphxx.entity.QrtzJobDetails;
 import com.triumphxx.service.QrtzJobDetailsService;
@@ -14,10 +13,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author:wangyupeng
- * @Date:2020/5/28
- * @Time:14:04
- * @desc:我的定时任务测试
+ * @author:triumphxx
+ * @Date:2020/8/1
+ * @Time:3:38 下午
+ * @微信公众号：北漂码农有话说
+ * @网站：http://blog.triumphxx.com.cn/
+ * @GitHub https://github.com/triumphxx
  **/
 @Component
 @Slf4j

@@ -12,7 +12,7 @@
 <div id="app">
     <button @click="query">查询定时任务</button>
     <button @click="">添加定时任务</button>
-    <p v-show="isShow" style="background-color: red">{{msg}}</p>
+    <p v-show="isShow" ><font style="background-color: aquamarine">{{msg}}</font></p>
     <table class="table" style="line-break: auto">
         <thead>
         <tr v-show="showFlag">
